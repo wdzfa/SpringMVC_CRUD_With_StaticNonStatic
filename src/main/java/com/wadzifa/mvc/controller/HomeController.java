@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.wadzifa.mvc.dto.SearchFormData;
 import com.wadzifa.mvc.entity.Product;
 import com.wadzifa.mvc.service.ProductService;
 
@@ -22,6 +23,7 @@ public class HomeController {
     public String welcome(Model model) {
         String message = "Welcome to Spring MVC with WR";
         model.addAttribute("msg", message);
+        model.addAttribute("searchForm", new SearchFormData());
         model.addAttribute("products", service.findAll());
         return "index";
     }
@@ -54,5 +56,14 @@ public class HomeController {
     public String update(Product product, Model model) {
         service.updateProduct(product);
         return "redirect:/";
+    }
+
+    @PostMapping("/search")
+    public String search(SearchFormData searchFormData, Model model) {
+        String message = "Welcome to Spring MVC with WR";
+        model.addAttribute("msg", message);
+        model.addAttribute("searchForm", searchFormData);
+        model.addAttribute("products", service.findByName(searchFormData.getKeyword()));
+        return "index";
     }
 }
